@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  qmk:
+    image: qmkfm/qmk_firmware
+    privileged: true
+    working_dir: /qmk_firmware
+    volumes:
+      - ./qmk_firmware/keyboards:/qmk_firmware/keyboards
+      - ./.build:/qmk_firmware/.build
+    environment:
+      KEYBOARD: keyball
+      KEYMAP: leftball
+    # QMK Command: qmk compile -kb KEYBOARD -km KEYMAP
+    command: /bin/bash -c 'qmk compile -kb $$KEYBOARD -km $$KEYMAP'
