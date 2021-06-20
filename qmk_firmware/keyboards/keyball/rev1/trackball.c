@@ -32,7 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 
 #ifndef TRACKBALL_SCROLL_DIVIDER
-#    define TRACKBALL_SCROLL_DIVIDER 10
+#    define TRACKBALL_SCROLL_DIVIDER 20
 #endif
 #if TRACKBALL_SCROLL_DIVIDER <= 0
 #    error "TRACKBALL_SCROLL_DIVIDER should be larger than zero"
