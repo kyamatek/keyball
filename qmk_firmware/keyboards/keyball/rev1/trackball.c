@@ -45,6 +45,7 @@ __attribute__((weak)) void pointing_device_init(void) {
 }
 
 static bool is_scroll_mode;
+static int trackball_divider;
 
 static int8_t clamp(int16_t value) {
     return value < -128 ? -128 : value > 127 ? 127 : (int8_t)value;
@@ -90,8 +91,8 @@ __attribute__((weak)) void trackball_process_delta_user(int8_t dx, int8_t dy) {
         r.h = dx / TRACKBALL_SCROLL_DIVIDER;
         r.v = -dy / TRACKBALL_SCROLL_DIVIDER;
     } else {
-        r.x = dx;
-        r.y = dy;
+        r.x = dx / trackball_divider;
+        r.y = dy / trackball_divider;
     }
     pointing_device_set_report(r);
 }
@@ -102,6 +103,10 @@ bool trackball_get_scroll_mode(void) {
 
 void trackball_set_scroll_mode(bool mode) {
     is_scroll_mode = mode;
+}
+
+void trackball_set_divider(int divider) {
+    trackball_divider = divider;
 }
 
 #endif // TRACKBALL_DRIVER_DISABLE

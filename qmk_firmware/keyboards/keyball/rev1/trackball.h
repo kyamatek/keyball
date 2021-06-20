@@ -34,4 +34,8 @@ bool trackball_get_scroll_mode(void);
 // When scroll mode enabled, rotating trackball reports scrolling events.
 void trackball_set_scroll_mode(bool mode);
 
+// trackball_set_divider set divider of trackball.
+// The larger the value, the lower the speed of the pointer.
+void trackball_set_divider(int divider);
+
 #endif // TRACKBALL_DRIVER_DISABLE
