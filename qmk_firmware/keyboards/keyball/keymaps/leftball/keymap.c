@@ -59,6 +59,7 @@ enum custom_keycodes {
 #define KC_AL_CP MT(MOD_LALT, KC_CAPS)  // alt or caps lock
 #define KC_G_BS MT(MOD_LGUI, KC_BSPC)   // command or back space
 #define KC_G_DEL MT(MOD_LGUI, KC_DEL)   // command or delete
+#define KC_S_ENT MT(MOD_RSFT, KC_ENT)   // shift or enter
 #define KC_A_BS LT(_BALL, KC_BSPC)    // adjust or back space
 #define KC_A_DEL LT(_BALL, KC_DEL)    // adjust or delete
 #define KC_AL_SP MT(MOD_LALT, KC_SPC)  // alt or space
@@ -80,7 +81,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|-----+-----+-----+-----+-----+-----|           |-----+-----+-----+-----+-----+-----|
      LSFT ,  Z  ,  X  ,  C  ,  V  ,  B  ,                 ,  N  ,  M  , COMM, DOT , SLSH,
   //|-----+-----+-----+-----+-----+-----|           \-----+-----+-----+-----+-----+-----'
-     L_ESC,RAISE,RGUI , SPC ,LALT ,                 ,L_ENT,RSFT,RGUI,  MBTN1, BSPC ,RAISE 
+     L_ESC,RAISE,RGUI , SPC ,LALT ,                 ,L_ENT,S_ENT,RGUI ,MBTN1, BSPC ,RAISE 
   //`-----+-----+  +-----+-----+-----+----'       `----+-----+-----+  +-----+-----+-----'
   ),
 
@@ -92,7 +93,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|-----+-----+-----+-----+-----+-----|           |-----+-----+-----+-----+-----+-----|
      LSFT ,CIRC , AMPR,ASTR ,LPRN ,RPRN             ,     , EQL , GRV ,QUOT ,MBTN2,BSLS ,
   //|-----+-----+-----+-----+-----+-----|           \-----+-----+-----+-----+-----+-----'
-      ESC ,     ,RGUI , SPC ,LALT ,                 ,L_ENT,RSFT ,RGUI ,MBTN1, DEL ,     
+      ESC ,     ,RGUI , SPC ,LALT ,                 ,L_ENT,S_ENT,RGUI ,MBTN1, DEL ,     
   //`-----+-----+  +-----+-----+-----+----'       `----+-----+-----+  +-----+-----+-----'
   ),
 
