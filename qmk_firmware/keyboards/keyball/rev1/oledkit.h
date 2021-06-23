@@ -1,9 +1,6 @@
 /*
-This is the c configuration file for the keymap
-
-Copyright 2012 Jun Wako <wakojun@gmail.com>
-Copyright 2015 Jack Humbert
 Copyright 2021 @Yowkees
+Copyright 2021 MURAOKA Taro (aka KoRoN, @kaoriya)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -21,25 +18,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#define PMW_3360
+#if defined(OLED_DRIVER_ENABLE) && !defined(OLEDKIT_DISABLE)
 
-//#define USE_MATRIX_I2C
+// oledkit_render_info_user renders keyboard's internal state information to
+// primary board. A keymap can override this by defining a function with same
+// signature.
+//
+// It render a logo as default.
+void oledkit_render_info_user(void);
 
-/* Select hand configuration */
+// oledkit_render_logo_user renders a logo of keyboard to secondary board.
+// A keymap can override this by defining a function with same signature.
+void oledkit_render_logo_user(void);
 
-//#define MASTER_LEFT
-#define MASTER_RIGHT
-
-#define SOFT_SERIAL_PIN D2
-
-#ifdef RGBLIGHT_ENABLE
-//    #define RGBLIGHT_ANIMATIONS
-    #define RGBLIGHT_LIMIT_VAL 120
-    #define RGBLIGHT_HUE_STEP 10
-    #define RGBLIGHT_SAT_STEP 17
-    #define RGBLIGHT_VAL_STEP 17
-#endif
-
-#define OLED_FONT_H "keyboards/keyball/lib/glcdfont.c"
-
-#define LAYER_STATE_16BIT
+#endif // OLED_DRIVER_ENABLE
