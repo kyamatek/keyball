@@ -123,9 +123,65 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
+uint8_t posx = 0;
+uint8_t posy = 11;
+bool on = true;
+uint8_t rmx = 0;
+uint8_t rmy = 11;
+const char integers[10] = "0123456789";
+uint8_t count = 0;
+uint8_t ten = 0;
+uint8_t hundred = 0;
+uint8_t thousand = 0;
+uint8_t ten_thousand = 0;
+
+
+void countup(void) {
+    if (count == 9) {
+        count = 0;
+        if (ten == 9) {
+            ten = 0;
+            if (hundred == 9) {
+                hundred = 0;
+                if (thousand == 9) {
+                    thousand = 0;
+                    if (ten_thousand == 9) {
+                        ten_thousand = 0;
+                    } else {
+                        ten_thousand++;
+                    }
+                } else {
+                    thousand++;
+                }
+            } else {
+                hundred++;
+            }
+        } else {
+            ten++;
+        }
+    } else {
+        count++;
+    }
+    rmx = posx;
+    rmy = posy;
+    if (posx == 127) {
+        posx = 0;
+        if (posy == 31) {
+            posy = 11;
+            on = !on;
+        } else {
+            posy++;
+        }
+    } else {
+        posx++;
+    }
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   report_mouse_t currentReport = {};
+  if (record->event.pressed) {
+      countup();
+  }
 
   switch (keycode) {
     case KC_MBTN1:
@@ -228,6 +284,15 @@ void oledkit_render_info_user(void) {
     }
     oled_write_P(PSTR("Layer: "), false);
     oled_write_ln_P(n, false);
+    oled_write_P(PSTR(""), false);
+    oled_write_P(PSTR("Count: "), false);
+    oled_write_char(integers[ten_thousand], false);
+    oled_write_char(integers[thousand], false);
+    oled_write_char(integers[hundred], false);
+    oled_write_char(integers[ten], false);
+    oled_write_char(integers[count], false);
+    //oled_write_pixel(posx, posy, on);
+    //oled_write_pixel(rmx, rmy, false);
 }
 
 #endif
