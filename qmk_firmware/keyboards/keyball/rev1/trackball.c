@@ -49,7 +49,6 @@ __attribute__((weak)) void pointing_device_init(void) {
     }
 }
 
-static int trackball_divider;
 static bool is_scroll_mode = false;
 
 static int16_t accum_count = 0;
@@ -112,8 +111,8 @@ __attribute__((weak)) void trackball_process_user(int8_t dx, int8_t dy) {
         r.h = dx;
         r.v = -dy;
     } else {
-        r.x = dx / trackball_divider;
-        r.y = dy / trackball_divider;
+        r.x = dx;
+        r.y = dy;
     }
     pointing_device_set_report(r);
 }
@@ -130,10 +129,6 @@ void trackball_set_scroll_mode(bool mode) {
         accum_x = 0;
         accum_y = 0;
     }
-}
-
-void trackball_set_divider(int divider) {
-    trackball_divider = divider;
 }
 
 #endif // TRACKBALL_DRIVER_DISABLE

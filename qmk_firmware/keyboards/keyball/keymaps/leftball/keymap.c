@@ -134,6 +134,7 @@ uint8_t ten = 0;
 uint8_t hundred = 0;
 uint8_t thousand = 0;
 uint8_t ten_thousand = 0;
+static int trackball_divider = 1;
 
 
 void countup(void) {
@@ -238,23 +239,35 @@ void keyboard_post_init_user() {
     debug_mouse = true;
 }
 
+void trackball_process_user(int8_t dx, int8_t dy) {
+    report_mouse_t r = pointing_device_get_report();
+    if (trackball_get_scroll_mode()) {
+        r.h = dx;
+        r.v = -dy;
+    } else {
+        r.x = dx / trackball_divider;
+        r.y = dy / trackball_divider;
+    }
+    pointing_device_set_report(r);
+}
+
 layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
     case _BALL:
         trackball_set_scroll_mode(true);
-        trackball_set_divider(1);
+        trackball_divider = 1;
         break;
     case _LOWER:
         trackball_set_scroll_mode(true);
-        trackball_set_divider(1);
+        trackball_divider = 1;
         break;
     case _RAISE:
         trackball_set_scroll_mode(false);
-        trackball_set_divider(3);
+        trackball_divider = 3;
         break;
     default:
         trackball_set_scroll_mode(false);
-        trackball_set_divider(1);
+        trackball_divider = 1;
         break;
     }
   return state;
