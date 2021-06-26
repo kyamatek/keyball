@@ -123,11 +123,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
-uint8_t posx = 0;
-uint8_t posy = 11;
-bool on = true;
-uint8_t rmx = 0;
-uint8_t rmy = 11;
+//uint8_t posx = 0;
+//uint8_t posy = 11;
+//bool on = true;
+//uint8_t rmx = 0;
+//uint8_t rmy = 11;
 const char integers[10] = "0123456789";
 uint8_t count = 0;
 uint8_t ten = 0;
@@ -135,6 +135,12 @@ uint8_t hundred = 0;
 uint8_t thousand = 0;
 uint8_t ten_thousand = 0;
 static int trackball_divider = 1;
+
+static bool is_shift = false;
+static bool is_ctrl = false;
+static bool regflag = false;
+static uint8_t dxtmp = 0;
+static uint8_t dytmp = 0;
 
 
 void countup(void) {
@@ -163,6 +169,7 @@ void countup(void) {
     } else {
         count++;
     }
+    /*
     rmx = posx;
     rmy = posy;
     if (posx == 127) {
@@ -176,6 +183,7 @@ void countup(void) {
     } else {
         posx++;
     }
+    */
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -215,6 +223,27 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       pointing_device_set_report(currentReport);
       return false;
+    case KC_LSFT:
+      if (record->event.pressed) {
+        is_shift = true;
+      } else {
+        is_shift = false;
+      }
+      return true;
+    case KC_S_ENT:
+      if (record->event.pressed) {
+        is_shift = true;
+      } else {
+        is_shift = false;
+      }
+      return true;
+    case KC_LCTL:
+      if (record->event.pressed) {
+        is_ctrl = true;
+      } else {
+        is_ctrl = false;
+      }
+      return true;
   }
   return true;
 }
@@ -241,6 +270,58 @@ void keyboard_post_init_user() {
 
 void trackball_process_user(int8_t dx, int8_t dy) {
     report_mouse_t r = pointing_device_get_report();
+    if (is_shift && ((dx > 1 || dx < -1) || (dy > 1 || dy < -1))) {
+        if (dy > 0 && dy > dx && dy > -dx) {
+            unregister_code(KC_LSFT);
+            unregister_code(KC_RSFT);
+            register_code(KC_DOWN);
+            unregister_code(KC_DOWN);
+        } else if (dy < 0 && dy < dx && dy < -dx) {
+            unregister_code(KC_LSFT);
+            unregister_code(KC_RSFT);
+            register_code(KC_UP);
+            unregister_code(KC_UP);
+        } else if (dx < 0 && dx < dy && dx < -dy) {
+            unregister_code(KC_LSFT);
+            unregister_code(KC_RSFT);
+            register_code(KC_LEFT);
+            unregister_code(KC_LEFT);
+        } else if (dx > 0 && dx > dy && dx > -dy) {
+            unregister_code(KC_LSFT);
+            unregister_code(KC_RSFT);
+            register_code(KC_RGHT);
+            unregister_code(KC_RGHT);
+        }
+        return;
+    }
+    if (!regflag && is_ctrl && ((dx > 2 || dx < -2) || (dy > 2 || dy < -2)) && ((dx > 0 && dx > dxtmp) || (dx < 0 && dx < dxtmp)) && ((dy > 0 && dy > dytmp) || (dy < 0 && dy < dytmp))) {
+        dxtmp = dx;
+        dytmp = dy;
+        if (dy > 0 && dy > dx && dy > -dx) {
+            register_code(KC_DOWN);
+            regflag = true;
+        } else if (dy < 0 && dy < dx && dy < -dx) {
+            register_code(KC_UP);
+            regflag = true;
+        } else if (dx < 0 && dx < dy && dx < -dy) {
+            register_code(KC_RGHT);
+            regflag = true;
+        } else if (dx > 0 && dx > dy && dx > -dy) {
+            register_code(KC_LEFT);
+            regflag = true;
+        }
+
+    }
+    if (regflag && dx < 2 && dy < 2 && dx > -2 && dy > -2) {
+        unregister_code(KC_DOWN);
+        unregister_code(KC_UP);
+        unregister_code(KC_RGHT);
+        unregister_code(KC_LEFT);
+        regflag = false;
+        dxtmp = 0;
+        dytmp = 0;
+    }
+    if (is_ctrl || is_shift) return;
     if (trackball_get_scroll_mode()) {
         r.h = dx;
         r.v = -dy;
@@ -304,6 +385,14 @@ void oledkit_render_info_user(void) {
     oled_write_char(integers[hundred], false);
     oled_write_char(integers[ten], false);
     oled_write_char(integers[count], false);
+    oled_write_ln_P(PSTR(""), false);
+    if (is_shift) {
+        oled_write_P(PSTR("SHIFT"), false);
+    } else {
+        oled_write_P(PSTR("NORMAL"), false);
+    }
+
+    
     //oled_write_pixel(posx, posy, on);
     //oled_write_pixel(rmx, rmy, false);
 }
