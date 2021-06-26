@@ -139,8 +139,6 @@ static int trackball_divider = 1;
 static bool is_shift = false;
 static bool is_ctrl = false;
 static bool regflag = false;
-static uint8_t dxtmp = 0;
-static uint8_t dytmp = 0;
 
 
 void countup(void) {
@@ -294,32 +292,25 @@ void trackball_process_user(int8_t dx, int8_t dy) {
         }
         return;
     }
-    if (!regflag && is_ctrl && ((dx > 2 || dx < -2) || (dy > 2 || dy < -2)) && ((dx > 0 && dx > dxtmp) || (dx < 0 && dx < dxtmp)) && ((dy > 0 && dy > dytmp) || (dy < 0 && dy < dytmp))) {
-        dxtmp = dx;
-        dytmp = dy;
+    if (!regflag && is_ctrl && ((dx > 2 || dx < -2) || (dy > 2 || dy < -2))) {
         if (dy > 0 && dy > dx && dy > -dx) {
             register_code(KC_DOWN);
-            regflag = true;
+            unregister_code(KC_DOWN);
         } else if (dy < 0 && dy < dx && dy < -dx) {
             register_code(KC_UP);
-            regflag = true;
+            unregister_code(KC_UP);
         } else if (dx < 0 && dx < dy && dx < -dy) {
             register_code(KC_RGHT);
-            regflag = true;
+            unregister_code(KC_RGHT);
         } else if (dx > 0 && dx > dy && dx > -dy) {
             register_code(KC_LEFT);
-            regflag = true;
+            unregister_code(KC_LEFT);
         }
+        regflag = true;
 
     }
     if (regflag && dx < 2 && dy < 2 && dx > -2 && dy > -2) {
-        unregister_code(KC_DOWN);
-        unregister_code(KC_UP);
-        unregister_code(KC_RGHT);
-        unregister_code(KC_LEFT);
         regflag = false;
-        dxtmp = 0;
-        dytmp = 0;
     }
     if (is_ctrl || is_shift) return;
     if (trackball_get_scroll_mode()) {
@@ -386,10 +377,13 @@ void oledkit_render_info_user(void) {
     oled_write_char(integers[ten], false);
     oled_write_char(integers[count], false);
     oled_write_ln_P(PSTR(""), false);
+    oled_write_P(PSTR("SubLr: "), false);
     if (is_shift) {
-        oled_write_P(PSTR("SHIFT"), false);
+        oled_write_ln_P(PSTR("Shift"), false);
+    } else if (is_ctrl) {
+        oled_write_ln_P(PSTR("Ctrl"), false);
     } else {
-        oled_write_P(PSTR("NORMAL"), false);
+        oled_write_ln_P(PSTR("Normal"), false);
     }
 
     
