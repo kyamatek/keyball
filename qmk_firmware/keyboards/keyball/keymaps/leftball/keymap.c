@@ -138,6 +138,7 @@ static int trackball_divider = 1;
 
 static bool is_shift = false;
 static bool is_ctrl = false;
+static bool is_opt = false;
 static bool regflag = false;
 
 
@@ -242,6 +243,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         is_ctrl = false;
       }
       return true;
+    case KC_LALT:
+      if (record->event.pressed) {
+        is_opt = true;
+      } else {
+        is_opt = false;
+      }
+      return true;
   }
   return true;
 }
@@ -335,7 +343,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
         break;
     case _RAISE:
         trackball_set_scroll_mode(false);
-        trackball_divider = 3;
+        trackball_divider = 4;
         break;
     default:
         trackball_set_scroll_mode(false);
@@ -382,6 +390,8 @@ void oledkit_render_info_user(void) {
         oled_write_ln_P(PSTR("Shift"), false);
     } else if (is_ctrl) {
         oled_write_ln_P(PSTR("Ctrl"), false);
+    } else if (is_opt) {
+        oled_write_ln_P(PSTR("Option"), false);
     } else {
         oled_write_ln_P(PSTR("Normal"), false);
     }
