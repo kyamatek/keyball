@@ -250,6 +250,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         is_opt = false;
       }
       return true;
+    case KC_RGUI:
+      if (record->event.pressed) {
+        trackball_set_scroll_mode(true);
+      } else {
+        trackball_set_scroll_mode(false);
+      }
+      return true;
   }
   return true;
 }
