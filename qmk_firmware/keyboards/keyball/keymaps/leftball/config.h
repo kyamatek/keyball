@@ -27,8 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* Select hand configuration */
 
-//#define MASTER_LEFT
-#define MASTER_RIGHT
+#define MASTER_LEFT
+//#define MASTER_RIGHT
 
 #define SOFT_SERIAL_PIN D2
 
@@ -41,5 +41,3 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 
 #define OLED_FONT_H "keyboards/keyball/lib/glcdfont.c"
-
-#define LAYER_STATE_16BIT
