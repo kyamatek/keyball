@@ -35,7 +35,8 @@ enum custom_keycodes {
   RAISE,
   KC_MBTN1,
   KC_MBTN2,
-  KC_MBTN3
+  KC_MBTN3,
+  BALL_CH
 };
 
 // common
@@ -89,7 +90,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       KC_TAB ,  KC_1  ,  KC_2  ,  KC_3  ,  KC_4  ,  KC_5  ,                     KC_WBACK,  KC_6  ,  KC_7  ,  KC_8  ,  KC_9  ,  KC_0  ,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-     KC_LCTL ,KC_EXLM , KC_AT  ,KC_HASH , KC_DLR ,KC_PERC ,                     KC_WFWRD,KC_LEFT ,KC_DOWN , KC_UP  ,KC_RGHT ,KC_MINS ,
+     KC_LCTL ,KC_EXLM , KC_AT  ,KC_HASH ,BALL_CH ,KC_PERC ,                     KC_WFWRD,KC_LEFT ,KC_DOWN , KC_UP  ,KC_RGHT ,KC_MINS ,
   //|--------+--------+--------+--------+--------+--------|                    `--------+--------+--------+--------+--------+--------|
      KC_LSFT ,KC_CIRC , KC_AMPR,KC_ASTR ,KC_LPRN ,KC_RPRN ,                               KC_EQL , KC_GRV ,KC_QUOT ,KC_MBTN2,KC_BSLS ,
   //|--------+--------+--------+--------+--------+--------'            ,--------+-------+--------+--------+--------+--------+--------|
@@ -140,6 +141,7 @@ static bool is_shift = false;
 static bool is_ctrl = false;
 static bool is_opt = false;
 static bool regflag = false;
+static bool is_scroll = false;
 
 
 void countup(void) {
@@ -252,11 +254,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return true;
     case KC_RGUI:
       if (record->event.pressed) {
-        trackball_set_scroll_mode(true);
+        trackball_set_scroll_mode(!is_scroll);
       } else {
-        trackball_set_scroll_mode(false);
+        trackball_set_scroll_mode(is_scroll);
       }
       return true;
+    case BALL_CH:
+      if (record->event.pressed) {
+        is_scroll = !is_scroll;
+      } 
+      return false;
+
   }
   return true;
 }
@@ -341,19 +349,19 @@ void trackball_process_user(int8_t dx, int8_t dy) {
 layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
     case _BALL:
-        trackball_set_scroll_mode(true);
+        trackball_set_scroll_mode(!is_scroll);
         trackball_divider = 1;
         break;
     case _LOWER:
-        trackball_set_scroll_mode(true);
+        trackball_set_scroll_mode(!is_scroll);
         trackball_divider = 1;
         break;
     case _RAISE:
-        trackball_set_scroll_mode(false);
+        trackball_set_scroll_mode(is_scroll);
         trackball_divider = 4;
         break;
     default:
-        trackball_set_scroll_mode(false);
+        trackball_set_scroll_mode(is_scroll);
         trackball_divider = 1;
         break;
     }
@@ -391,6 +399,7 @@ void oledkit_render_info_user(void) {
     oled_write_char(integers[hundred], false);
     oled_write_char(integers[ten], false);
     oled_write_char(integers[count], false);
+    /*
     oled_write_ln_P(PSTR(""), false);
     oled_write_P(PSTR("SubLr: "), false);
     if (is_shift) {
@@ -401,6 +410,14 @@ void oledkit_render_info_user(void) {
         oled_write_ln_P(PSTR("Option"), false);
     } else {
         oled_write_ln_P(PSTR("Normal"), false);
+    }
+    */
+    oled_write_ln_P(PSTR(""), false);
+    oled_write_P(PSTR("BalMd: "), false);
+    if (is_scroll) {
+        oled_write_ln_P(PSTR("Scroll"), false);
+    } else {
+        oled_write_ln_P(PSTR("Track"), false);
     }
 
     
