@@ -41,4 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 #define TAPPING_TERM 150
 
+#undef PRODUCT_ID
+#define PRODUCT_ID 0x0002
+
 #define OLED_FONT_H "keyboards/keyball/lib/glcdfont.c"
