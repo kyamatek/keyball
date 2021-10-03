@@ -71,10 +71,6 @@
 #define LiftCutoff_Tune2 0x65
 
 #define PMW_CLOCK_SPEED 70000000
-#define MIN_CPI 100
-#define MAX_CPI 12000
-#define CPI_STEP 100
-#define CLAMP_CPI(value) value<MIN_CPI ? MIN_CPI : value> MAX_CPI ? MAX_CPI : value
 #define SPI_MODE 3
 #define SPI_DIVISOR (F_CPU / PMW_CLOCK_SPEED)
 #define US_BETWEEN_WRITES 180
