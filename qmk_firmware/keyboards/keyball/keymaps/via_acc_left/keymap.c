@@ -185,11 +185,17 @@ void oledkit_render_info_user(void) {
 static inline int8_t clip2int8(int16_t v) { return (v) < -127 ? -127 : (v) > 127 ? 127 : (int8_t)v; }
 
 int8_t keyball_process_trackball_acceleration(const int16_t val) {
-    int step1 = 3;
-    float step1_acc = 3;
+    //int step1 = 3;
+    //float step1_acc = 3;
 
-    int step2 = 10;
-    float step2_acc = 13;
+    //int step2 = 10;
+    //float step2_acc = 13;
+
+    int step1 = 2;
+    float step1_acc = 2;
+
+    int step2 = 2;
+    float step2_acc = 2;
 
     int abs_val = abs(val);
 
@@ -258,6 +264,8 @@ void keyball_process_trackball_user(const trackball_delta_t *primary, const trac
         if (!is_scroll_mode) {
             r.x = keyball_process_trackball_acceleration((primary->x) / trackball_divider);
             r.y = keyball_process_trackball_acceleration((primary->y) / trackball_divider);
+            //r.x += clip2int8((primary->x) / trackball_divider);
+            //r.y += clip2int8((primary->y) / trackball_divider);
         } else {
             r.h += clip2int8(primary->x);
             r.v -= clip2int8(primary->y);
@@ -317,11 +325,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
             return false;
 
         case KC_CPI_UP:
-            on_cpi_button(4 * CPI_STEP, record, false);
+            on_cpi_button(2 * CPI_STEP, record, false);
             return false;
 
         case KC_CPI_DOWN:
-            on_cpi_button(-4 * CPI_STEP, record, false);
+            on_cpi_button(-2 * CPI_STEP, record, false);
             return false;
         case KC_LSFT:
             if (record->event.pressed) {
