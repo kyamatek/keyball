@@ -27,6 +27,7 @@ enum keymap_layers {
     _QWERTY,
     _LOWER,
     _RAISE,
+    _TEN,
     _BALL,
 };
 
@@ -55,9 +56,11 @@ enum keymap_layers {
 #define KC_RAISE MO(_RAISE)
 #define KC_BALL TO(_BALL)
 #define KC_QWRT  TO(_QWERTY)
+#define KC_TEN  TO(_TEN)
 #define KC_L_ENT    LT(_LOWER, KC_ENT)
 #define KC_WBACK LGUI(KC_LBRC) // browser back
 #define KC_WFWRD LGUI(KC_RBRC) // browser forward
+#define KC_L_TEN    LT(_LOWER, KC_TEN)
 
 enum custom_keycodes {
     KC_CPI_DEF = SAFE_RANGE,
@@ -98,11 +101,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
      KC_TAB  , KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  ,                     _______ ,KC_F6  , KC_F7  , KC_F8   , KC_F9  , KC_F10 ,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-     KC_HASH ,KC_EXLM ,KC_AMPR ,KC_PIPE , KC_AT  ,KC_RPRN ,                     _______ ,KC_CPI_DEF,KC_CPI_DOWN,KC_CPI_UP, KC_F11 ,KC_F12,
+     KC_HASH ,KC_EXLM ,KC_AMPR ,KC_PIPE , KC_AT  ,KC_RPRN ,                     KC_TEN  ,KC_CPI_DEF,KC_CPI_DOWN,KC_CPI_UP, KC_F11 ,KC_F12,
   //|--------+--------+--------+--------+--------+--------|                    `--------+--------+--------+--------+--------+--------|
       KC_GRV , KC_DQT ,KC_QUOT ,KC_CIRC ,KC_TILD ,KC_BTN3,                              KC_VOLD ,KC_VOLU ,_______ ,_______ ,_______ ,
   //|--------+--------+--------+--------+--------+--------'            ,--------+-------+--------+--------+--------+--------+--------|
      _______ ,KC_PERC ,_______ ,       _______ ,_______ ,               _______ ,KC_BALL ,_______,         _______ ,_______ ,_______   
+  //`--------+--------+--------'      `--------+--------'              `--------+--------' `--------'  `--------'  `--------+--------'
+  ),
+
+  [_TEN] = LAYOUT_left_ball( \
+  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+     _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,                     _______ ,KC_DOT  ,KC_1    ,KC_2    ,KC_3    ,_______ ,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+     _______ ,KC_MINS ,KC_DOT  ,KC_COMM ,KC_EQL  ,_______ ,                     _______ ,KC_COMM ,KC_4    ,KC_5    ,KC_6    ,_______ ,
+  //|--------+--------+--------+--------+--------+--------|                    `--------+--------+--------+--------+--------+--------|
+     _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,                              KC_0    ,KC_7    ,KC_8    ,KC_9    ,_______ ,
+  //|--------+--------+--------+--------+--------+--------'            ,--------+-------+--------+--------+--------+--------+--------|
+     _______ ,_______ ,_______ ,       _______ ,_______ ,               KC_QWRT ,_______ ,_______,         _______ ,_______ ,_______   
   //`--------+--------+--------'      `--------+--------'              `--------+--------' `--------'  `--------'  `--------+--------'
   ),
 
@@ -128,6 +143,18 @@ static bool is_opt = false;
 static bool regflag = false;
 static bool is_scroll = false;
 static int trackball_divider = 1;
+
+char tap_count[] = "00000";
+void countup_taps(void) {
+    for (int i = 4; i >= 0; i --) {
+        if (tap_count[i] >= '9') {
+            tap_count[i] = '0';
+        } else {
+            tap_count[i] = tap_count[i] + 1;
+            break;
+        }
+    }
+}
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
@@ -165,6 +192,9 @@ void oledkit_render_info_user(void) {
         case _LOWER:
             n = PSTR("Lower");
             break;
+        case _TEN:
+            n = PSTR("Tenkey");
+            break;
         case _BALL:
             n = PSTR("Adjust");
             break;
@@ -175,8 +205,11 @@ void oledkit_render_info_user(void) {
     oled_write_P(PSTR("Layer: "), false);
     oled_write_ln_P(n, false);
 
-    keyball_oled_render_ballinfo();
-    keyball_oled_render_keyinfo();
+    //keyball_oled_render_ballinfo();
+    //keyball_oled_render_keyinfo();
+    //oled_write_ln_P(PSTR(" "), false);
+    oled_write_P(PSTR("Count: "), false);
+    oled_write(tap_count, false);
 }
 
 #endif
@@ -319,6 +352,9 @@ static void on_cpi_button(int cpi, keyrecord_t *record, bool absolute) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record)
 {
+    if (record->event.pressed) {
+        countup_taps();
+    }
     switch (keycode) {
         case KC_CPI_DEF:
             on_cpi_button(DEFAULT_CPI, record, true);
