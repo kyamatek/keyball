@@ -29,7 +29,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #    define RGBLIGHT_VAL_STEP 17
 #endif
 
-#define TAPPING_TERM 150
+#define TAPPING_TERM 10
+#define RETRO_TAPPING
 
 #undef PRODUCT_ID
 #define PRODUCT_ID 0x0002
