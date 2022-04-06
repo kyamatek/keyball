@@ -23,11 +23,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../../pmw/pmw.h"
 #include "../../optical_sensor/optical_sensor.h"
 
+#include "keymap_jp.h"
+
 enum keymap_layers {
     _QWERTY,
     _QWTYWIN,
     _LOWER,
     _RAISE,
+    _RAISEWIN,
     _TEN,
     _BALL,
 };
@@ -55,6 +58,7 @@ enum keymap_layers {
 // additional
 #define KC_S_ENT MT(MOD_RSFT, KC_ENT)   // shift or enter
 #define KC_RAISE MO(_RAISE)
+#define KC_RAWIN MO(_RAISEWIN)
 #define KC_BALL TO(_BALL)
 #define KC_QWRT  TO(_QWERTY)
 #define KC_TEN  TO(_TEN)
@@ -89,15 +93,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //`--------+--------+--------'      `--------+--------'              `--------+--------' `--------'  `--------'  `--------+--------'
   ),
 
+  /* [_QWTYWIN] = LAYOUT_left_ball( \ */
+  /* //,-----------------------------------------------------.                    ,-----------------------------------------------------. */
+  /*     KC_TAB ,  KC_Q  ,  KC_W  ,  KC_E  ,  KC_R  ,  KC_T  ,                     KC_LBRC ,  KC_Y  ,  KC_U  ,  KC_I  ,  KC_O  ,  KC_P  , */
+  /* //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------| */
+  /*    KC_LCTL ,  KC_A  ,  KC_S  ,  KC_D  ,  KC_F  ,  KC_G  ,                     KC_RBRC ,  KC_H  ,  KC_J  ,  KC_K  ,  KC_L  ,KC_SCLN , */
+  /* //|--------+--------+--------+--------+--------+--------|                    `--------+--------+--------+--------+--------+--------| */
+  /*    KC_LSFT ,  KC_Z  ,  KC_X  ,  KC_C  ,  KC_V  ,  KC_B  ,                                KC_N  ,  KC_M  , KC_COMM, KC_DOT , KC_SLSH, */
+  /* //|--------+--------+--------+--------+--------+--------'            ,--------+-------+--------+--------+--------+--------+--------| */
+  /*    KC_ESC  ,KC_RAISE,KC_RGUI ,        KC_SPC ,KC_LALT ,               KC_L_ENT,KC_S_ENT,KC_LCTL ,     KC_BTN1,   KC_BSPC ,KC_RAISE */ 
+  /* //`--------+--------+--------'      `--------+--------'              `--------+--------' `--------'  `--------'  `--------+--------' */
+  /* ), */
+
   [_QWTYWIN] = LAYOUT_left_ball( \
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      KC_TAB ,  KC_Q  ,  KC_W  ,  KC_E  ,  KC_R  ,  KC_T  ,                     KC_LBRC ,  KC_Y  ,  KC_U  ,  KC_I  ,  KC_O  ,  KC_P  ,
+      KC_TAB ,  JP_Q  ,  JP_W  ,  JP_E  ,  JP_R  ,  JP_T  ,                     JP_LBRC ,  JP_Y  ,  JP_U  ,  JP_I  ,  JP_O  ,  JP_P  ,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-     KC_LCTL ,  KC_A  ,  KC_S  ,  KC_D  ,  KC_F  ,  KC_G  ,                     KC_RBRC ,  KC_H  ,  KC_J  ,  KC_K  ,  KC_L  ,KC_SCLN ,
+     KC_LCTL ,  JP_A  ,  JP_S  ,  JP_D  ,  JP_F  ,  JP_G  ,                     JP_RBRC ,  JP_H  ,  JP_J  ,  JP_K  ,  JP_L  ,JP_SCLN ,
   //|--------+--------+--------+--------+--------+--------|                    `--------+--------+--------+--------+--------+--------|
-     KC_LSFT ,  KC_Z  ,  KC_X  ,  KC_C  ,  KC_V  ,  KC_B  ,                                KC_N  ,  KC_M  , KC_COMM, KC_DOT , KC_SLSH,
+     KC_LSFT ,  JP_Z  ,  JP_X  ,  JP_C  ,  JP_V  ,  JP_B  ,                                JP_N  ,  JP_M  , JP_COMM, JP_DOT , JP_SLSH,
   //|--------+--------+--------+--------+--------+--------'            ,--------+-------+--------+--------+--------+--------+--------|
-     KC_ESC  ,KC_RAISE,KC_RGUI ,        KC_SPC ,KC_LALT ,               KC_L_ENT,KC_S_ENT,KC_LCTL ,     KC_BTN1,   KC_BSPC ,KC_RAISE 
+     KC_ESC  ,KC_RAWIN,KC_RGUI ,        KC_SPC ,KC_LALT ,               KC_L_ENT,KC_S_ENT,KC_LCTL ,     KC_BTN1,   KC_BSPC ,KC_RAWIN 
   //`--------+--------+--------'      `--------+--------'              `--------+--------' `--------'  `--------'  `--------+--------'
   ),
 
@@ -110,6 +126,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      KC_LSFT ,KC_CIRC , KC_AMPR,KC_ASTR ,KC_LPRN ,KC_RPRN ,                               KC_EQL , KC_GRV ,KC_QUOT ,KC_BTN2 ,KC_BSLS ,
   //|--------+--------+--------+--------+--------+--------'            ,--------+-------+--------+--------+--------+--------+--------|
       KC_ESC ,_______ ,KC_RGUI ,        KC_SPC ,KC_LALT ,               KC_L_ENT,KC_S_ENT,KC_RGUI,      KC_BTN1,   KC_DEL   ,_______   
+  //`--------+--------+--------'      `--------+--------'              `--------+--------' `--------'  `--------'  `--------+--------'
+  ),
+
+  [_RAISEWIN] = LAYOUT_left_ball( \
+  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+      KC_TAB ,  JP_1  ,  JP_2  ,  JP_3  ,  JP_4  ,  JP_5  ,                     KC_WBACK,  JP_6  ,  JP_7  ,  JP_8  ,  JP_9  ,  JP_0  ,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+     KC_LCTL ,JP_EXLM , JP_AT  ,JP_HASH ,JP_DLR  ,JP_PERC ,                     KC_WFWRD,KC_LEFT ,KC_DOWN , KC_UP  ,KC_RGHT ,JP_MINS ,
+  //|--------+--------+--------+--------+--------+--------|                    `--------+--------+--------+--------+--------+--------|
+     KC_LSFT ,JP_CIRC , JP_AMPR,JP_ASTR ,JP_LPRN ,JP_RPRN ,                               JP_EQL , JP_GRV ,JP_QUOT ,KC_BTN2 ,JP_BSLS ,
+  //|--------+--------+--------+--------+--------+--------'            ,--------+-------+--------+--------+--------+--------+--------|
+      KC_ESC ,_______ ,KC_RGUI ,        KC_SPC ,KC_LALT ,               KC_L_ENT,KC_S_ENT,KC_LCTL,      KC_BTN1,   KC_DEL   ,_______   
   //`--------+--------+--------'      `--------+--------'              `--------+--------' `--------'  `--------'  `--------+--------'
   ),
 
@@ -371,6 +399,46 @@ static void on_cpi_button(int cpi, keyrecord_t *record, bool absolute) {
     pmw_set_config((config_pmw_t){kb_config.cpi});
 }
 
+static bool process_jp_symbols_impl(uint16_t keycode, bool pressed) {
+    if (!pressed) {
+        return true;
+    }
+    uint8_t shift = keyboard_report->mods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT));
+    if (!shift) {
+        return true;
+    }
+    uint16_t s;
+    switch (keycode) {
+        // Replace Shift-Symbols like ANSI for JIS.
+        case JP_2:    s = JP_AT; break;
+        case JP_6:    s = JP_CIRC; break;
+        case JP_7:    s = JP_AMPR; break;
+        case JP_8:    s = JP_ASTR; break;
+        case JP_9:    s = JP_LPRN; break;
+        case JP_0:    s = JP_RPRN; break;
+        case JP_GRV:  s = JP_TILD; break;
+        case JP_EQL:  s = JP_PLUS; break;
+        case JP_MINS: s = JP_UNDS; break;
+        case JP_QUOT: s = JP_DQUO; break;
+        case JP_SCLN: s = JP_COLN; break;
+        default: return true;
+    }
+    unregister_mods(shift);
+    tap_code16(s);
+    register_mods(shift);
+    return false;
+}
+
+bool process_jp_symbols(uint16_t keycode, keyrecord_t *record) {
+    return process_jp_symbols_impl(keycode, record->event.pressed);
+}
+
+void tap_code16jp(uint16_t keycode) {
+    if (process_jp_symbols_impl(keycode, true)) {
+        tap_code16(keycode);
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record)
 {
     if (record->event.pressed) {
@@ -424,6 +492,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
             }
             return true;
         default:
+            if (get_highest_layer(default_layer_state) == _QWTYWIN)
+                return process_jp_symbols(keycode, record);
             return true;
     }
 }
