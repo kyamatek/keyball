@@ -25,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 enum keymap_layers {
     _QWERTY,
+    _QWTYWIN,
     _LOWER,
     _RAISE,
     _TEN,
@@ -62,6 +63,9 @@ enum keymap_layers {
 #define KC_WFWRD LGUI(KC_RBRC) // browser forward
 #define KC_L_TEN    LT(_LOWER, KC_TEN)
 
+#define KC_WIN DF(_QWTYWIN)
+#define KC_MAC DF(_QWERTY)
+
 enum custom_keycodes {
     KC_CPI_DEF = SAFE_RANGE,
     KC_CPI_UP,
@@ -85,6 +89,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //`--------+--------+--------'      `--------+--------'              `--------+--------' `--------'  `--------'  `--------+--------'
   ),
 
+  [_QWTYWIN] = LAYOUT_left_ball( \
+  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+      KC_TAB ,  KC_Q  ,  KC_W  ,  KC_E  ,  KC_R  ,  KC_T  ,                     KC_LBRC ,  KC_Y  ,  KC_U  ,  KC_I  ,  KC_O  ,  KC_P  ,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+     KC_LCTL ,  KC_A  ,  KC_S  ,  KC_D  ,  KC_F  ,  KC_G  ,                     KC_RBRC ,  KC_H  ,  KC_J  ,  KC_K  ,  KC_L  ,KC_SCLN ,
+  //|--------+--------+--------+--------+--------+--------|                    `--------+--------+--------+--------+--------+--------|
+     KC_LSFT ,  KC_Z  ,  KC_X  ,  KC_C  ,  KC_V  ,  KC_B  ,                                KC_N  ,  KC_M  , KC_COMM, KC_DOT , KC_SLSH,
+  //|--------+--------+--------+--------+--------+--------'            ,--------+-------+--------+--------+--------+--------+--------|
+     KC_ESC  ,KC_RAISE,KC_RGUI ,        KC_SPC ,KC_LALT ,               KC_L_ENT,KC_S_ENT,KC_LCTL ,     KC_BTN1,   KC_BSPC ,KC_RAISE 
+  //`--------+--------+--------'      `--------+--------'              `--------+--------' `--------'  `--------'  `--------+--------'
+  ),
+
   [_RAISE] = LAYOUT_left_ball( \
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       KC_TAB ,  KC_1  ,  KC_2  ,  KC_3  ,  KC_4  ,  KC_5  ,                     KC_WBACK,  KC_6  ,  KC_7  ,  KC_8  ,  KC_9  ,  KC_0  ,
@@ -105,7 +121,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    `--------+--------+--------+--------+--------+--------|
      _______ ,KC_PIPE ,KC_QUOT ,KC_DQUO ,KC_TILD ,KC_PLUS ,                              KC_PLUS ,KC_TILD ,KC_DQUO ,_______ ,KC_PIPE ,
   //|--------+--------+--------+--------+--------+--------'            ,--------+-------+--------+--------+--------+--------+--------|
-     _______ ,KC_PERC ,_______ ,       _______ ,_______ ,               _______ ,KC_BALL ,_______,         _______ ,_______ ,_______   
+     _______ ,KC_PERC ,_______ ,       _______ ,_______ ,               _______ ,KC_BALL ,KC_WIN ,         _______ ,KC_MAC  ,_______   
   //`--------+--------+--------'      `--------+--------'              `--------+--------' `--------'  `--------'  `--------+--------'
   ),
 
@@ -184,7 +200,12 @@ void oledkit_render_info_user(void) {
     const char *n;
     switch (get_highest_layer(layer_state)) {
         case _QWERTY:
-            n = PSTR("Default");
+            n = PSTR("Mac");
+            if (get_highest_layer(default_layer_state) == _QWTYWIN)
+                n = PSTR("Windows");
+            break;
+        case _QWTYWIN:
+            n = PSTR("Windows");
             break;
         case _RAISE:
             n = PSTR("Raise");
