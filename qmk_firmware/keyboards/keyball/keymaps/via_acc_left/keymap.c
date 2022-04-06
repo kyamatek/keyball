@@ -131,9 +131,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_RAISEWIN] = LAYOUT_left_ball( \
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      KC_TAB ,  JP_1  ,  JP_2  ,  JP_3  ,  JP_4  ,  JP_5  ,                     KC_WBACK,  JP_6  ,  JP_7  ,  JP_8  ,  JP_9  ,  JP_0  ,
+      KC_TAB ,  JP_1  ,  JP_2  ,  JP_3  ,  JP_4  ,  JP_5  ,                     KC_WBAK,  JP_6  ,  JP_7  ,  JP_8  ,  JP_9  ,  JP_0  ,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-     KC_LCTL ,JP_EXLM , JP_AT  ,JP_HASH ,JP_DLR  ,JP_PERC ,                     KC_WFWRD,KC_LEFT ,KC_DOWN , KC_UP  ,KC_RGHT ,JP_MINS ,
+     KC_LCTL ,JP_EXLM , JP_AT  ,JP_HASH ,JP_DLR  ,JP_PERC ,                     KC_WFWD,KC_LEFT ,KC_DOWN , KC_UP  ,KC_RGHT ,JP_MINS ,
   //|--------+--------+--------+--------+--------+--------|                    `--------+--------+--------+--------+--------+--------|
      KC_LSFT ,JP_CIRC , JP_AMPR,JP_ASTR ,JP_LPRN ,JP_RPRN ,                               JP_EQL , JP_GRV ,JP_QUOT ,KC_BTN2 ,JP_BSLS ,
   //|--------+--------+--------+--------+--------+--------'            ,--------+-------+--------+--------+--------+--------+--------|
