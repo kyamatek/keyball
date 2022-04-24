@@ -298,6 +298,13 @@ void keyball_process_trackball_user(const trackball_delta_t *primary, const trac
     bool is_scroll_mode = keyball_get_scroll_mode();
     report_mouse_t r = pointing_device_get_report();
     if (primary) {
+        if (get_highest_layer(default_layer_state) == _QWTYWIN && is_ctrl) {
+            r.h += clip2int8(primary->x);
+            r.v -= clip2int8(primary->y);
+            pointing_device_set_report(r);
+            pointing_device_send();
+            return;
+        }
         if (is_shift && (((primary->x) > 1 || (primary->x) < -1) || ((primary->y) > 1 || (primary->y) < -1))) {
             if ((primary->y) > 0 && (primary->y) > (primary->x) && (primary->y) > -(primary->x)) {
                 unregister_code(KC_LSFT);
