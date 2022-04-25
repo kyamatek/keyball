@@ -298,12 +298,9 @@ void keyball_process_trackball_user(const trackball_delta_t *primary, const trac
     bool is_scroll_mode = keyball_get_scroll_mode();
     report_mouse_t r = pointing_device_get_report();
     if (primary) {
-        if (get_highest_layer(default_layer_state) == _QWTYWIN && is_ctrl) {
-            r.h += clip2int8(primary->x);
-            r.v -= clip2int8(primary->y);
-            pointing_device_set_report(r);
-            pointing_device_send();
-            return;
+        if (get_highest_layer(default_layer_state) == _QWTYWIN && is_ctrl && (primary->y != 0)) {
+            unregister_code(KC_LCTL);
+            unregister_code(KC_RCTL);
         }
         if (is_shift && (((primary->x) > 1 || (primary->x) < -1) || ((primary->y) > 1 || (primary->y) < -1))) {
             if ((primary->y) > 0 && (primary->y) > (primary->x) && (primary->y) > -(primary->x)) {
@@ -329,7 +326,7 @@ void keyball_process_trackball_user(const trackball_delta_t *primary, const trac
             }
             return;
         }
-        if (!regflag && is_ctrl && (((primary->x) > 2 || (primary->x) < -2) || ((primary->y) > 2 || (primary->y) < -2))) {
+        if (get_highest_layer(default_layer_state) != _QWTYWIN && !regflag && is_ctrl && (((primary->x) > 2 || (primary->x) < -2) || ((primary->y) > 2 || (primary->y) < -2))) {
             if ((primary->y) > 0 && (primary->y) > (primary->x) && (primary->y) > -(primary->x)) {
                 register_code(KC_DOWN);
                 unregister_code(KC_DOWN);
@@ -345,10 +342,10 @@ void keyball_process_trackball_user(const trackball_delta_t *primary, const trac
             }
             regflag = true;
         }
-        if (regflag && (primary->x) < 2 && (primary->y) < 2 && (primary->x) > -2 && (primary->y) > -2) {
+        if (get_highest_layer(default_layer_state) != _QWTYWIN && regflag && (primary->x) < 2 && (primary->y) < 2 && (primary->x) > -2 && (primary->y) > -2) {
             regflag = false;
         }
-        if (is_ctrl || is_shift) return;
+        if (get_highest_layer(default_layer_state) != _QWTYWIN && (is_ctrl || is_shift)) return;
 
         if (!is_scroll_mode) {
             r.x = keyball_process_trackball_acceleration((primary->x) / trackball_divider);
@@ -480,8 +477,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
         case KC_LCTL:
             if (record->event.pressed) {
                 is_ctrl = true;
+                if (get_highest_layer(default_layer_state) == _QWTYWIN)
+                    keyball_set_scroll_mode(!is_scroll);
             } else {
                 is_ctrl = false;
+                if (get_highest_layer(default_layer_state) == _QWTYWIN)
+                    keyball_set_scroll_mode(is_scroll);
             }
             return true;
         case KC_LALT:
