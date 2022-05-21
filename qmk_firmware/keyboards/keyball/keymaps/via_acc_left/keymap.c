@@ -352,6 +352,9 @@ void keyball_process_trackball_user(const trackball_delta_t *primary, const trac
             r.y = keyball_process_trackball_acceleration((primary->y) / trackball_divider);
             //r.x += clip2int8((primary->x) / trackball_divider);
             //r.y += clip2int8((primary->y) / trackball_divider);
+        } else if (get_highest_layer(default_layer_state) == _QWTYWIN) {
+            r.h += clip2int8(primary->x);
+            r.v += clip2int8(primary->y);
         } else {
             r.h += clip2int8(primary->x);
             r.v -= clip2int8(primary->y);
@@ -425,6 +428,7 @@ static bool process_jp_symbols_impl(uint16_t keycode, bool pressed) {
         case JP_MINS: s = JP_UNDS; break;
         case JP_QUOT: s = JP_DQUO; break;
         case JP_SCLN: s = JP_COLN; break;
+        case JP_BSLS: s = JP_PIPE; break;
         default: return true;
     }
     unregister_mods(shift);
