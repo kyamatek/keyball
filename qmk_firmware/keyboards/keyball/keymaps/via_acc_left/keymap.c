@@ -145,7 +145,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
      KC_TAB  , KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  ,                     _______ ,KC_F6  , KC_F7  , KC_F8   , KC_F9  , KC_F10 ,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-     _______ ,KC_UNDS ,_______ ,KC_VOLD ,KC_VOLU ,_______ ,                     KC_TEN  ,KC_CPI_DEF,KC_CPI_DOWN,KC_CPI_UP, KC_F11 ,KC_UNDS,
+     _______ ,KC_UNDS ,_______ ,KC_VOLD ,KC_VOLU ,_______ ,                     KC_TEN  ,KC_CPI_DEF,KC_CPI_DOWN,KC_CPI_UP, KC_F11 ,KC_F12,
   //|--------+--------+--------+--------+--------+--------|                    `--------+--------+--------+--------+--------+--------|
      _______ ,KC_PIPE ,KC_QUOT ,KC_DQUO ,KC_TILD ,KC_PLUS ,                              KC_PLUS ,KC_TILD ,KC_DQUO ,_______ ,KC_PIPE ,
   //|--------+--------+--------+--------+--------+--------'            ,--------+-------+--------+--------+--------+--------+--------|
@@ -353,7 +353,7 @@ void keyball_process_trackball_user(const trackball_delta_t *primary, const trac
             //r.x += clip2int8((primary->x) / trackball_divider);
             //r.y += clip2int8((primary->y) / trackball_divider);
         } else if (get_highest_layer(default_layer_state) == _QWTYWIN) {
-            r.h += clip2int8(primary->x);
+            r.h -= clip2int8(primary->x);
             r.v += clip2int8(primary->y);
         } else {
             r.h += clip2int8(primary->x);
