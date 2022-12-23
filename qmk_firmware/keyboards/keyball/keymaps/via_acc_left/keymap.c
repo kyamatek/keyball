@@ -211,8 +211,12 @@ layer_state_t layer_state_set_user(layer_state_t state) {
             trackball_divider = 1;
             break;
         case _RAISE:
-            keyball_set_scroll_mode(is_scroll);
-            trackball_divider = 4;
+            keyball_set_scroll_mode(true);
+            trackball_divider = 1;
+            break;
+        case _RAISEWIN:
+            keyball_set_scroll_mode(true);
+            trackball_divider = 1;
             break;
         default:
             keyball_set_scroll_mode(false);
